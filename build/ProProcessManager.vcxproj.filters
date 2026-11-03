@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessEnumerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessEnumerator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessInfo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{472A5751-BE69-3BCF-BC17-AE690B2D1A1D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4AD4F592-5756-352C-8DE0-53D7AF3D7617}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

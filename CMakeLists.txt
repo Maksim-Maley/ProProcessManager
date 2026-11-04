@@ -12,6 +12,8 @@ add_executable(${PROJECT_NAME}
     ProProcessManager/ProcessEnumerator.cpp
     ProProcessManager/ProcessEnumerator.hpp
     ProProcessManager/ProcessInfo.hpp
+    ProProcessManager/ProcessManager.cpp
+    ProProcessManager/ProcessManager.hpp
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

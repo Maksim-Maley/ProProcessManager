@@ -7,12 +7,18 @@
     <ClCompile Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessEnumerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessEnumerator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessInfo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

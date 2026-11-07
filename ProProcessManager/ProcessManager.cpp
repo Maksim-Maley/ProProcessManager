@@ -1,6 +1,7 @@
 #include "ProcessManager.hpp"
+#include <algorithm>
 
-std::vector<ProcessInfo> ProcessManager::FilterByName(const std::vector<ProcessInfo>& processes, const std::wstring& name)
+std::vector<ProcessInfo> ProcessManager::FindByName(const std::vector<ProcessInfo>& processes, const std::wstring& name)
 {
 	std::vector<ProcessInfo> nameFindProcess;
 

@@ -144,13 +144,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MemoryMonitor.cpp" />
     <ClCompile Include="ProcessEnumerator.cpp" />
     <ClCompile Include="ProcessManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MemoryMonitor.hpp" />
     <ClInclude Include="ProcessEnumerator.hpp" />
     <ClInclude Include="ProcessInfo.hpp" />
     <ClInclude Include="ProcessManager.hpp" />
+    <ClInclude Include="SystemMemoryInfo.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

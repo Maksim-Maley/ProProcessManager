@@ -362,6 +362,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessInfo.hpp" />
     <ClCompile Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessManager.cpp" />
     <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\ProcessManager.hpp" />
+    <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\SystemMemoryInfo.hpp" />
+    <ClInclude Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\MemoryMonitor.hpp" />
+    <ClCompile Include="F:\C++\Изучение_C++\Pro_Process_Manager\ProProcessManager\ProProcessManager\MemoryMonitor.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

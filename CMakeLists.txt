@@ -14,6 +14,9 @@ add_executable(${PROJECT_NAME}
     ProProcessManager/ProcessInfo.hpp
     ProProcessManager/ProcessManager.cpp
     ProProcessManager/ProcessManager.hpp
+    ProProcessManager/SystemMemoryInfo.hpp
+    ProProcessManager/MemoryMonitor.hpp
+    ProProcessManager/MemoryMonitor.cpp
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

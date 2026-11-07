@@ -9,4 +9,5 @@ struct ProcessInfo
 	std::wstring name;
 	DWORD parentPid;
 	DWORD threadCount;
+	SIZE_T workingSetSize;
 };

@@ -1,39 +1,99 @@
 ﻿#include "ProcessEnumerator.hpp"
 #include "ProcessManager.hpp"
+#include "MemoryMonitor.hpp"
 #include <iostream>
 #include <iomanip>
 
 int main()
 {
-    std::wstring name;
-    int pid;
-
     ProcessEnumerator enumerator;
-    ProcessManager manager;
-
-    std::wcout << "Find process name: ";
-    std::wcin >> name;
 
     std::vector<ProcessInfo> processes = enumerator.GetProcess();
-    std::vector<ProcessInfo> nameFindProcess = manager.FilterByName(processes, name);
-    
+
+    MemoryMonitor memoryMonitor;
+    memoryMonitor.UpdateMemory(processes);
+
+    //Processes list
+    std::wcout << "Processes: " << processes.size()
+        << '\n'
+        << '\n';
+
+    if (processes.empty())
+    {
+        std::wcout << "Nothing" << '\n';
+    }
+    else
+    {
+        std::wcout << std::left;
+        std::wcout << std::setw(5)
+            << "PID" << " | "
+            << std::setw(40)
+            << "NAME" << " | "
+            << std::setw(6)
+            << "PARENT" << " | "
+            << std::setw(7)
+            << "THREADS" << " | "
+            << "\n";
+        std::wcout << "--------------------------------------------------------------------------------------" << std::endl;
+        for (std::size_t i = 0; i < processes.size(); ++i)
+        {
+            std::wcout << std::left
+                << std::setw(5) << processes[i].pid << " | "
+                << std::setw(40) << processes[i].name << " | "
+                << std::setw(6) << processes[i].parentPid << " | "
+                << std::setw(7) << processes[i].threadCount << " | "
+                << std::setw(7) << processes[i].workingSetSize << " KiB" << " | "
+                << '\n';
+        }
+        std::wcout << '\n';
+    }
+
+    //Info memory system
+    SystemMemoryMonitor systemMonitor;
+    SystemMemoryInfo systemMemoryI;
+
+    if (systemMonitor.UpdateMemorySystem(systemMemoryI))
+    {
+        std::cout << "Total RAM: "
+            << systemMemoryI.totalPhysical << " MiB\n";
+
+        std::cout << "Used RAM: "
+            << systemMemoryI.usedPhysical << " MiB\n";
+
+        std::cout << "Available RAM: "
+            << systemMemoryI.availablePhysical << " MiB\n";
+
+        std::cout << "Memory Load: "
+            << systemMemoryI.memoryLoad << "%\n";
+    }
+    std::wcout << '\n';
+
+    ProcessManager manager;
+    std::wstring name;
+    DWORD pid;
+
+    std::wcout << "Find process name: ";
+    std::getline(std::wcin, name);
+
+    std::vector<ProcessInfo> nameFindProcess = manager.FindByName(processes, name);
+
     // Name Find process
     if (nameFindProcess.empty())
     {
-        std::cout << "Nothing" << '\n';
+        std::wcout << "Nothing" << '\n';
     }
     else
     {
         std::wcout << L"Found processes: "
             << nameFindProcess.size() << L"\n";
 
-        std::cout << std::left;
-        std::cout << std::setw(5)
+        std::wcout << std::left;
+        std::wcout << std::setw(5)
             << "PID" << " | "
             << std::setw(40)
             << "NAME" 
             << "\n";
-        std::cout << "--------------------------------------------------" << std::endl;
+        std::wcout << "--------------------------------------------------" << std::endl;
         for (std::size_t i = 0; i < nameFindProcess.size(); ++i)
         {
             std::wcout << std::left
@@ -58,55 +118,20 @@ int main()
     }
     else
     {
-        std::cout << "Process not found!\n";
-    }
-    
-    
-
-    //Processes list
-    std::wcout << "Processes: " << processes.size()
-        << '\n'
-        << '\n';
-
-    if (processes.empty())
-    {
-        std::cout << "Nothing" << '\n';
-    }
-    else
-    {
-        std::cout << std::left;
-        std::cout << std::setw(5)
-            << "PID" << " | "
-            << std::setw(40)
-            << "NAME" << " | "
-            << std::setw(6)
-            << "PARENT" << " | "
-            << std::setw(7)
-            << "THREADS" << " | "
-            << "\n";
-        std::cout << "--------------------------------------------------------------------------------------" << std::endl;
-        for (std::size_t i = 0; i < processes.size(); ++i)
-        {
-            std::wcout << std::left
-                << std::setw(5) << processes[i].pid << " | "
-                << std::setw(40) << processes[i].name << " | "
-                << std::setw(6) << processes[i].parentPid << " | "
-                << std::setw(7) << processes[i].threadCount << " | "
-                << '\n';
-        }
-        
+        std::wcout << "Process not found!\n";
     }
 
+    //Sort
     int sortChoice, orderChoice;
 
-    std::cout << "\n========== PROCESS SORTING ==========\n";
+    std::wcout << "\n========== PROCESS SORTING ==========\n";
 
-    std::cout << "[1] Sort by PID\n";
-    std::cout << "[2] Sort by Thread Count\n";
-    std::cout << "[3] Sort by Process Name\n";
+    std::wcout << "[1] Sort by PID\n";
+    std::wcout << "[2] Sort by Thread Count\n";
+    std::wcout << "[3] Sort by Process Name\n";
 
-    std::cout << "\nYour choice: ";
-    std::cin >> sortChoice;
+    std::wcout << "\nYour choice: ";
+    std::wcin >> sortChoice;
 
     SortBy sortBy;
 
@@ -128,17 +153,17 @@ int main()
         break;
     }
     default:
-        std::cout << "Invalid sorting option!\n";
+        std::wcout << "Invalid sorting option!\n";
         return 1;
     }
 
-    std::cout << "\n========== SORT ORDER ==========\n";
+    std::wcout << "\n========== SORT ORDER ==========\n";
 
-    std::cout << "[1] Ascending\n";
-    std::cout << "[2] Descending\n";
+    std::wcout << "[1] Ascending\n";
+    std::wcout << "[2] Descending\n";
 
-    std::cout << "\nYour choice: ";
-    std::cin >> orderChoice;
+    std::wcout << "\nYour choice: ";
+    std::wcin >> orderChoice;
 
     SortOrder order;
 
@@ -155,14 +180,14 @@ int main()
         break;
     }
     default:
-        std::cout << "Invalid sorting option!\n";
+        std::wcout << "Invalid sorting option!\n";
         return 1;
     }
     
     manager.SortProcesses(processes, sortBy, order);
 
-    std::cout << std::left;
-    std::cout << std::setw(5)
+    std::wcout << std::left;
+    std::wcout << std::setw(5)
         << "PID" << " | "
         << std::setw(40)
         << "NAME" << " | "
@@ -171,7 +196,7 @@ int main()
         << std::setw(7)
         << "THREADS" << " | "
         << "\n";
-    std::cout << "--------------------------------------------------------------------------------------" << std::endl;
+    std::wcout << "--------------------------------------------------------------------------------------" << std::endl;
     for (std::size_t i = 0; i < processes.size(); ++i)
     {
         std::wcout << std::left

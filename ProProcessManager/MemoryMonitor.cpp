@@ -21,7 +21,7 @@ void MemoryMonitor::UpdateMemory(std::vector<ProcessInfo>& processes)
 		
 		if (result)
 		{
-			process.workingSetSize = memoryCounters.WorkingSetSize / 1024;
+			process.workingSetSize = memoryCounters.WorkingSetSize;
 		}
 		else
 		{
@@ -45,11 +45,11 @@ bool SystemMemoryMonitor::UpdateMemorySystem(SystemMemoryInfo& memoryInfo)
 		return false;
 	}
 
-	memoryInfo.totalPhysical = memoryStatus.ullTotalPhys / (1024 * 1024);
+	memoryInfo.totalPhysical = memoryStatus.ullTotalPhys;
 
-	memoryInfo.availablePhysical = memoryStatus.ullAvailPhys / (1024 * 1024);
+	memoryInfo.availablePhysical = memoryStatus.ullAvailPhys;
 
-	memoryInfo.usedPhysical = (memoryStatus.ullTotalPhys - memoryStatus.ullAvailPhys) / (1024 * 1024);
+	memoryInfo.usedPhysical = memoryStatus.ullTotalPhys - memoryStatus.ullAvailPhys;
 
 	memoryInfo.memoryLoad = memoryStatus.dwMemoryLoad;
 

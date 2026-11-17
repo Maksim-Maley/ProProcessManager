@@ -15,7 +15,8 @@ enum class SortBy
 {
 	PID,
 	ThreadCount,
-	Name
+	Name,
+	Memory
 };
 
 class ProcessManager

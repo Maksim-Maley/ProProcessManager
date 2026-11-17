@@ -143,12 +143,14 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CpuMonitor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemoryMonitor.cpp" />
     <ClCompile Include="ProcessEnumerator.cpp" />
     <ClCompile Include="ProcessManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CpuMonitor.hpp" />
     <ClInclude Include="MemoryMonitor.hpp" />
     <ClInclude Include="ProcessEnumerator.hpp" />
     <ClInclude Include="ProcessInfo.hpp" />

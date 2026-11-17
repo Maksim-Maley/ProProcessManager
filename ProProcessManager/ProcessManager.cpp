@@ -108,5 +108,30 @@ void ProcessManager::SortProcesses(std::vector<ProcessInfo>& processes, SortBy s
 		}
 		break;
 	}
+	case SortBy::Memory:
+	{
+		switch (order)
+		{
+		case SortOrder::Ascending:
+		{
+			std::sort(processes.begin(), processes.end(), [](const ProcessInfo& a, const ProcessInfo& b)
+				{
+					return a.workingSetSize < b.workingSetSize;
+				}
+			);
+			break;
+		}
+		case SortOrder::Descending:
+		{
+			std::sort(processes.begin(), processes.end(), [](const ProcessInfo& a, const ProcessInfo& b)
+				{
+					return a.workingSetSize > b.workingSetSize;
+				}
+			);
+			break;
+		}
+		}
+		break;
+	}
 	}
 }

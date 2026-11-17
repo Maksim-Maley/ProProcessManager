@@ -1,6 +1,7 @@
 ﻿#include "ProcessEnumerator.hpp"
 #include "ProcessManager.hpp"
 #include "MemoryMonitor.hpp"
+#include "CpuMonitor.hpp"
 #include <iostream>
 #include <iomanip>
 
@@ -9,6 +10,41 @@ int main()
     ProcessEnumerator enumerator;
 
     std::vector<ProcessInfo> processes = enumerator.GetProcess();
+
+    ProcessManager manager;
+    std::wstring name;
+
+    std::wcout << "Find process name: ";
+    std::getline(std::wcin, name);
+
+    std::vector<ProcessInfo> nameFindProcess = manager.FindByName(processes, name);
+
+    // Name Find process
+    if (nameFindProcess.empty())
+    {
+        std::wcout << "Nothing" << '\n';
+    }
+    else
+    {
+        std::wcout << L"Found processes: "
+            << nameFindProcess.size() << L"\n";
+
+        std::wcout << std::left;
+        std::wcout << std::setw(5)
+            << "PID" << " | "
+            << std::setw(40)
+            << "NAME"
+            << "\n";
+        std::wcout << "--------------------------------------------------" << std::endl;
+        for (std::size_t i = 0; i < nameFindProcess.size(); ++i)
+        {
+            std::wcout << std::left
+                << std::setw(5) << nameFindProcess[i].pid << " | "
+                << std::setw(40) << nameFindProcess[i].name << " | "
+                << '\n';
+        }
+        std::wcout << '\n';
+    }
 
     MemoryMonitor memoryMonitor;
     memoryMonitor.UpdateMemory(processes);
@@ -42,7 +78,8 @@ int main()
                 << std::setw(40) << processes[i].name << " | "
                 << std::setw(6) << processes[i].parentPid << " | "
                 << std::setw(7) << processes[i].threadCount << " | "
-                << std::setw(7) << processes[i].workingSetSize << " KiB" << " | "
+                << std::setw(7) << processes[i].workingSetSize /1024 << " KiB" << " | "
+                << std::setw(7) << processes[i].cpuUsage << " | "
                 << '\n';
         }
         std::wcout << '\n';
@@ -54,72 +91,30 @@ int main()
 
     if (systemMonitor.UpdateMemorySystem(systemMemoryI))
     {
-        std::cout << "Total RAM: "
-            << systemMemoryI.totalPhysical << " MiB\n";
+        std::wcout << "Total RAM: "
+            << systemMemoryI.totalPhysical / (1024 * 1024) << " MiB\n";
 
-        std::cout << "Used RAM: "
-            << systemMemoryI.usedPhysical << " MiB\n";
+        std::wcout << "Used RAM: "
+            << systemMemoryI.usedPhysical / (1024 * 1024) << " MiB\n";
 
-        std::cout << "Available RAM: "
-            << systemMemoryI.availablePhysical << " MiB\n";
+        std::wcout << "Available RAM: "
+            << systemMemoryI.availablePhysical / (1024 * 1024) << " MiB\n";
 
-        std::cout << "Memory Load: "
+        std::wcout << "Memory Load: "
             << systemMemoryI.memoryLoad << "%\n";
     }
     std::wcout << '\n';
 
-    ProcessManager manager;
-    std::wstring name;
-    DWORD pid;
+    CpuMonitor cpuMonitor;
 
-    std::wcout << "Find process name: ";
-    std::getline(std::wcin, name);
+    cpuMonitor.Update();
 
-    std::vector<ProcessInfo> nameFindProcess = manager.FindByName(processes, name);
+    Sleep(1000);
 
-    // Name Find process
-    if (nameFindProcess.empty())
-    {
-        std::wcout << "Nothing" << '\n';
-    }
-    else
-    {
-        std::wcout << L"Found processes: "
-            << nameFindProcess.size() << L"\n";
+    cpuMonitor.Update();
+    double usage = cpuMonitor.GetCpuUsage();
 
-        std::wcout << std::left;
-        std::wcout << std::setw(5)
-            << "PID" << " | "
-            << std::setw(40)
-            << "NAME" 
-            << "\n";
-        std::wcout << "--------------------------------------------------" << std::endl;
-        for (std::size_t i = 0; i < nameFindProcess.size(); ++i)
-        {
-            std::wcout << std::left
-                << std::setw(5) << nameFindProcess[i].pid << " | "
-                << std::setw(40) << nameFindProcess[i].name << " | "
-                << '\n';
-        }
-        std::wcout << '\n';
-    }
-
-    std::wcout << "Find process pid: ";
-    std::wcin >> pid;
-
-    std::optional<ProcessInfo> pidFindProcess = manager.FindByPid(processes, pid);
-
-    //PID find process
-    if (pidFindProcess.has_value())
-    {
-        std::wcout << "Name: " << pidFindProcess->name << '\n';
-        std::wcout << "PID: " << pidFindProcess->pid << '\n'
-            << '\n';
-    }
-    else
-    {
-        std::wcout << "Process not found!\n";
-    }
+    std::wcout << L"CPU Usage: " << usage << L"%" << '\n';
 
     //Sort
     int sortChoice, orderChoice;
@@ -129,6 +124,7 @@ int main()
     std::wcout << "[1] Sort by PID\n";
     std::wcout << "[2] Sort by Thread Count\n";
     std::wcout << "[3] Sort by Process Name\n";
+    std::wcout << "[4] Sort by Memory\n";
 
     std::wcout << "\nYour choice: ";
     std::wcin >> sortChoice;
@@ -150,6 +146,11 @@ int main()
     case 3:
     {
         sortBy = SortBy::Name;
+        break;
+    }
+    case 4:
+    {
+        sortBy = SortBy::Memory;
         break;
     }
     default:
@@ -204,7 +205,28 @@ int main()
             << std::setw(40) << processes[i].name << " | "
             << std::setw(6) << processes[i].parentPid << " | "
             << std::setw(7) << processes[i].threadCount << " | "
+            << std::setw(7) << processes[i].workingSetSize / 1024 << " KiB" << " | "
+            << '\n';
+    }std::wcout << '\n';
+
+    DWORD pid;
+
+    std::wcout << "Find process pid: ";
+    std::wcin >> pid;
+
+    std::optional<ProcessInfo> pidFindProcess = manager.FindByPid(processes, pid);
+
+    //PID find process
+    if (pidFindProcess.has_value())
+    {
+        std::wcout << "Name: " << pidFindProcess->name << '\n';
+        std::wcout << "PID: " << pidFindProcess->pid << '\n'
             << '\n';
     }
+    else
+    {
+        std::wcout << "Process not found!\n";
+    }
+
 }
 

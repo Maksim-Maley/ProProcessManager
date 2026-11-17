@@ -10,4 +10,5 @@ struct ProcessInfo
 	DWORD parentPid;
 	DWORD threadCount;
 	SIZE_T workingSetSize;
+	double cpuUsage = 0.0;
 };
